@@ -12,14 +12,12 @@ const app = express();
 let items = ["Buy Food", "Prepare Food", "Cook Food", "Eat Food", "Clean Plates"];
 // set an empty array for new work items
 let workItems = ["Show Up", "Get Settled", "Drink Coffee"];
-// set an array for fun 
-let funItems = ["Watch Movies", "Go to the Beach", "Go Hiking"];
-// set array for weekend items
-let weekendItems = ["Clean House", "Family Dinner", "Work"];
+// set an array for Fun and another for Weekend
+let funItems = ["Watch a movie with friends", "Play video games online", "Go out for a karaoke night"];
+let weekendItems = ["Clean the house", "Go grocery shopping", "Spend time with family"];
+let finalExamItems = ["ICS360", "ICS385", "BUS320"];
 
-// setup an array for Fun and another for Weekend
-
-// set EJS as the viewing engine to display html
+// setup EJS as the viewing engine to display html
 app.set('view engine', 'ejs');
 
 // use body parser to parse html file
@@ -46,10 +44,7 @@ app.post("/", function(req, res) {
     let item = req.body.newItem;
     
     // if route is /work, add to work list
-  // if list === Fun then go to /fun
-  // if list ==== Weekend then go to /weekend
-  
-      if (req.body.list === "Work") {
+    if (req.body.list === "Work") {
         workItems.push(item);
         res.redirect("/work");
     } 
@@ -63,6 +58,11 @@ app.post("/", function(req, res) {
         weekendItems.push(item);
         res.redirect("/weekend");
     }
+    // if route is /finalExam, add to finalExam list
+    else if (req.body.list === "finalExam") {
+        finalExamItems.push(item);
+        res.redirect("/finalExam");
+    }
     else {
         items.push(item);
         res.redirect("/");
@@ -72,11 +72,8 @@ app.post("/", function(req, res) {
 // display default to do list on the localhost:3000/work route!
 app.get("/work", function(req, res){
 
-  let day = date.getDate();
-  
     res.render("list", {listTitle: "Work Items To-Do List", newListItems: workItems})
 });
-
 
 // display default to do list on the localhost:3000/fun route!
 app.get("/fun", function(req, res){
@@ -90,9 +87,11 @@ app.get("/weekend", function(req, res){
     res.render("list", {listTitle: "Weekend Items To-Do List", newListItems: weekendItems})
 });
 
-// add a app.get for every route - /fun and /weekend
-// Make sure your listTitle starts off with Fun Items and Weekend Items
+app.get("/finalExam", function(req, res){
+
+    res.render("list", {listTitle: "Final Exam To-Do List", newListItems: finalExamItems})
+});
 
 app.listen(3000, function() {
-console.log ("Server is running on port 3000")
+    console.log ("Server is running on port 3000")
 });
